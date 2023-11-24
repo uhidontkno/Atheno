@@ -1,0 +1,6 @@
+{
+    "afk":"Set yourself as AFK, tracking anyone who mentions you.\nIf anyone does mention you, they will be notified that you went AFK, and you are doing something else like touching grass.\n\n**Paramaters**:\n- `message`: The message to give. (optional)",
+    "ping":"Show latency information about the bot, including Discord API ping, websocket connection ping, and general bot ping.",
+    "cstats":"Show the bot host's detailed computer usage information and other bot stats, includes system uptime, bot uptime, CPU usage, RAM, and more.",
+    "bal": "Show your balance, currently owned items, and more by using this command. Running this command also creates your user data if you haven't already done that."
+}

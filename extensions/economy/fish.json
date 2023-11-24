@@ -1,0 +1,16 @@
+[
+    ["TropicalFish", 0.2],
+    ["Bass", 0.1],
+    ["Shark", 0.002],
+    ["SwordFish", 0.25],
+    ["Cod", 0.57],
+    ["Trout", 0.09],
+    ["Salmon", 0.15],
+    ["Tuna", 0.18],
+    ["Anchovy", 0.66],
+    ["ClownFish", 0.4],
+    ["Goldfish", 0.69],
+    ["OscarFish", 0.3],
+    ["Whale", 0.0005],
+    ["Dolphin", 0.00025]
+]
