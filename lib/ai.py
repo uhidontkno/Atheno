@@ -15,7 +15,7 @@ class AI:
                 APIKEY = f.read().strip()
         else:
             logging.critical("environ/shuttleai not found. Make sure the file exists.")
-            sys.exit(1)
+            return f"```\n[ATHENO ERROR]: AI is disabled as the file environ/shuttleai does not exist.\nr```"
         NEWLINE = "\n"
         try:
          cli = OpenAI(api_key=APIKEY,base_url='https://api.shuttleai.app/v1')
