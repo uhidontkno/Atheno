@@ -31,7 +31,7 @@ main.py [args]
 
 # Donations:
 If you want to help me out on the work I do, please feel free to donate to one of these crypto addresses below:
-**BTC**: `186dGbqMAFLPzQAbdzaYtAWDiQwgDPFq8y`
-**Any ETH Token/Coin**: `0x4913AAb84c4b5f91753Ea517d372F0662e70CEEf`
-**LTC**: `LTaj6GCGJXQMtVcX1XtTeDWN4Yt2oaZTQ6` (Preferred)
-**XMR**: `49LFZRV4mdFgL5S8Tgr94g96L5dwE7Lx9b9ouetbFxwNKLpuL8y7CbBHMJjVv9KefLVh8uejfiNZiZFEVATqREDKAufEnqL`
+* **BTC**: `186dGbqMAFLPzQAbdzaYtAWDiQwgDPFq8y`
+* **Any ETH Token/Coin**: `0x4913AAb84c4b5f91753Ea517d372F0662e70CEEf`
+* **LTC**: `LTaj6GCGJXQMtVcX1XtTeDWN4Yt2oaZTQ6` (Preferred)
+* **XMR**: `49LFZRV4mdFgL5S8Tgr94g96L5dwE7Lx9b9ouetbFxwNKLpuL8y7CbBHMJjVv9KefLVh8uejfiNZiZFEVATqREDKAufEnqL`
