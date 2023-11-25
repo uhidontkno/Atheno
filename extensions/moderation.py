@@ -111,7 +111,7 @@ class Moderation(commands.Cog):
         if (not Utils.paramcheck(Utils,user)):
          await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.INVALID_PARAMS,vars=["user"]),ephemeral=True);return
         if not ctx.author.guild_permissions.ban_members:
-            await ctx.respond(f"❌ | You do not have permission to use the `/ban` command.", ephemeral=True)
+            await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.USER_NO_PERMS,vars=["Ban Members"]), ephemeral=True)
             return
     
 
@@ -202,7 +202,7 @@ class Moderation(commands.Cog):
          await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.INVALID_PARAMS,vars=["user, length"]),ephemeral=True);return
         if not ctx.author.guild_permissions.moderate_members:
             
-            await ctx.respond(f"❌ | You do not have permission to use the `/mute` command.", ephemeral=True)
+            await ctx.respond(await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.USER_NO_PERMS,vars=["Moderate Members"]), ephemeral=True), ephemeral=True)
             return
     
         duration_units = {
@@ -373,7 +373,7 @@ class Moderation(commands.Cog):
         if seconds == min_time:
             await ctx.channel.edit(slowmode_delay=0)
         elif seconds < min_time or seconds > max_time:
-            await ctx.respond(f"❌ | Error: Slow mode time must be between 0 and 6 hours.", ephemeral=True)
+            await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.GENERIC,vars=["Slowmode time must be from 0 seconds to 6 hours"]), ephemeral=True)
             return
         else:
             await ctx.channel.edit(slowmode_delay=seconds)
@@ -393,7 +393,7 @@ class Moderation(commands.Cog):
         await ctx.defer()
         try:
             if not channel.permissions_for(ctx.author).manage_channels or not channel.permissions_for(bot).manage_channels:
-                await ctx.respond("Both you and the bot must have the 'Manage Channels' permission to use this command.", ephemeral=True)
+                await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.GENERIC,vars=["Bot / Member may not have the Manage Channels permission."]), ephemeral=True)
                 return
             await channel.set_permissions(ctx.guild.default_role, send_messages=False, send_messages_in_threads=False)
             embed = discord.Embed(title="🔒 | Channel Lockdown", description=f"{channel.mention} has been locked. \n **Reason**: \n{reason}", color=discord.Color.red())
@@ -409,7 +409,7 @@ class Moderation(commands.Cog):
         await ctx.defer()
         try:
             if not channel.permissions_for(ctx.author).manage_channels or not channel.permissions_for(bot).manage_channels:
-                await ctx.respond("Both you and the bot must have the 'Manage Channels' permission to use this command.", ephemeral=True)
+                await ctx.respond(MessageBuilder.error(self=MessageBuilder, type=ErrorTypes.GENERIC,vars=["Bot / Member may not have the Manage Channels permission."]), ephemeral=True)
                 return
             await channel.set_permissions(ctx.guild.default_role, send_messages=True, send_messages_in_threads=True)
             embed = discord.Embed(title="🔓 | Channel Unlock", description=f"{channel.mention} has been unlocked. \n **Reason**: \n{reason}", color=discord.Color.green())
