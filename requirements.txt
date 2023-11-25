@@ -9,3 +9,4 @@ httpx
 aiohttp
 websockets
 wavelink==1.2.4
+bs4

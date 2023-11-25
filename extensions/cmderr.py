@@ -20,7 +20,7 @@ class CMDErrorCog(commands.Cog):
         else:
             em = MessageBuilder.error(MessageBuilder, ErrorTypes.GENERIC, [f"{error}"])
             await ctx.respond(embed=em)
-            pass
+            
 
 def setup(bot):
     bot.add_cog(CMDErrorCog(bot))

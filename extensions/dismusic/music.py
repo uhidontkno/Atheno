@@ -1,5 +1,5 @@
 import asyncio
-
+from lib.builder import *
 import async_timeout
 import wavelink
 from discord import ClientException
@@ -30,9 +30,8 @@ class Music(commands.Cog):
         player: DisPlayer = ctx.voice_client
 
         if ctx.author.voice.channel.id != player.channel.id:
-            raise MustBeSameChannel(
-                "You must be in the same voice channel as the player."
-            )
+            em = MessageBuilder.error(MessageBuilder, type=ErrorTypes.GENERIC,vars=["You must be in the same voice channel as the bot in order to use this command."])
+            await ctx.respond(embed=em)
 
         track_providers = {
             "yt": YouTubeTrack,
@@ -61,7 +60,7 @@ class Music(commands.Cog):
 
         for node in nodes:
             try:
-                with async_timeout.timeout(20):
+                with async_timeout.timeout(30):
                     tracks = await provider.search(query, node=node)
                     break
             except asyncio.TimeoutError:
@@ -108,7 +107,7 @@ class Music(commands.Cog):
                     f"[dismusic] ERROR - Failed to create node {config['host']}:{config['port']}"
                 )
 
-    @bridge.bridge_command(aliases=["con"])
+    @bridge.bridge_command(aliases=["con","c"])
     @voice_connected()
     async def connect(self, ctx: commands.Context):
         """Connect the player"""
@@ -119,19 +118,43 @@ class Music(commands.Cog):
             player: DisPlayer = await ctx.author.voice.channel.connect(cls=DisPlayer)
             self.bot.dispatch("dismusic_player_connect", player)
         except (asyncio.TimeoutError, ClientException):
-            return await ctx.send(content="Failed to connect to voice channel.")
+            return ctx.respond(embed=MessageBuilder.error(type=ErrorTypes.GENERIC,vars=["Failed to connect to VC."]))
+            
 
         player.bound_channel = ctx.channel
         player.bot = self.bot
 
         await ctx.respond(f"Connected to **`{ctx.author.voice.channel}`**")
+    
+    async def forceconnect(self,ctx):
+        if ctx.voice_client:
+            return
 
-    @bridge.bridge_command(aliases=["p"], invoke_without_command=True)
+        try:
+            player: DisPlayer = await ctx.author.voice.channel.connect(cls=DisPlayer)
+            self.bot.dispatch("dismusic_player_connect", player)
+        except (asyncio.TimeoutError, ClientException):
+            return ctx.send(embed=MessageBuilder.error(type=ErrorTypes.GENERIC,vars=["Failed to connect to VC."]))
+            
+
+        player.bound_channel = ctx.channel
+        player.bot = self.bot
+
+
+    @bridge.bridge_command(aliases=["p","ply"], invoke_without_command=True)
     async def play(self, ctx: commands.Context, service = "ytmusic", query:str = None):
         """Play or add song to queue (Defaults to YouTube)"""
+        if ctx.author.voice is None:
+            await ctx.respond(embed=MessageBuilder.error(type=ErrorTypes.GENERIC,vars=[f"You are not connected to VC."]))
+        if ctx.voice_client is None:
+            await ctx.send(embed=MessageBuilder.message(self=MessageBuilder,type=MessageTypes.INFO,vars=[f"Bot is not connected to any VC. Automatically trying to connect."]))
+            await self.forceconnect(ctx)
         if query == None:
             await ctx.respond("You must specify a query.");return
-        await self.play_track(ctx, query, service)
+        try:
+         await self.play_track(ctx, query, service)
+        except Exception as e:
+            await ctx.respond(embed=MessageBuilder.error(type=ErrorTypes.GENERIC,vars=[f"Failed to search for {query} on {service}.\n```\n{e}\n```"]))
     '''
     @play.command(aliases=["yt"])
     @voice_connected()
@@ -186,7 +209,7 @@ class Music(commands.Cog):
         await ctx.respond("Stopped the player :stop_button: ")
         self.bot.dispatch("dismusic_player_stop", player)
 
-    @bridge.bridge_command()
+    @bridge.bridge_command(aliases=["pau"])
     @voice_channel_player()
     async def pause(self, ctx: commands.Context):
         """Pause the player"""

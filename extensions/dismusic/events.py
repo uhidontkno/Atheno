@@ -1,6 +1,7 @@
 import wavelink
 from discord.ext import commands
-
+import logging
+from lib.builder import *
 from ._classes import Loop
 from .errors import (InvalidLoopMode, MustBeSameChannel, NotConnectedToVoice,
                      NotEnoughSong, NothingIsPlaying, PlayerNotConnected)
@@ -37,18 +38,3 @@ class MusicEvents(commands.Cog):
     async def on_wavelink_track_stuck(self, player, track, *args, **kwargs):
         self.bot.dispatch("dismusic_track_stuck", player, track)
         await self.handle_end_stuck_exception(player, track)
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        errors = (
-            InvalidLoopMode,
-            MustBeSameChannel,
-            NotConnectedToVoice,
-            PlayerNotConnected,
-            NothingIsPlaying,
-            NotEnoughSong,
-        )
-
-        if isinstance(error, errors):
-            await ctx.respond(error)
-        else:
-            pass

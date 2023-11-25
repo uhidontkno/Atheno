@@ -5,10 +5,11 @@ import async_timeout
 import discord
 from discord.ext import commands
 from wavelink import Player
-
+import aiohttp
+from bs4 import BeautifulSoup
 from ._classes import Loop
 from .errors import InvalidLoopMode, NotEnoughSong, NothingIsPlaying
-
+from lib.builder import *
 
 class DisPlayer(Player):
     def __init__(self, *args, **kwargs):
@@ -70,6 +71,27 @@ class DisPlayer(Player):
 
         return self.loop
 
+    async def getytavatar(self, youtube_handle):
+        url = f"https://apttutorials.com/yt-test.php?loc=&n1=&usern={youtube_handle}&ran=150"
+
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url, timeout=15) as response:
+                    if response.status == 200 and response.content_type == 'text/html':
+                        html_content = await response.text()
+
+                        # Parse HTML using BeautifulSoup
+                        soup = BeautifulSoup(html_content, 'html.parser')
+
+                        # Find the first <img> element and get its 'src' attribute
+                        img_element = soup.find('img')
+                        if img_element and 'src' in img_element.attrs:
+                            return img_element['src']
+        except aiohttp.ClientError:
+            pass  # Handle timeout or other client errors here
+
+        # Return default avatar if there's an error or no image source found
+        return self.client.user.display_avatar.url
     async def invoke_player(self, ctx: commands.Context = None) -> None:
         track = self.source
 
@@ -81,8 +103,7 @@ class DisPlayer(Player):
         )
         embed.set_author(
             name=track.author,
-            url=track.uri,
-            icon_url=self.client.user.display_avatar.url,
+            url=track.uri
         )
         try:
             embed.set_thumbnail(url=track.thumb)

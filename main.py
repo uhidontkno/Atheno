@@ -77,7 +77,6 @@ intents.message_content = True
 bot = bridge.Bot(command_prefix="-", intents=intents, help_command = AthenoHelpCommand())
 bot.lavalink_nodes = [
     {"host": "n1.ll.darrennathanael.com", "port": 2269, "password": "glasshost1984"},
-    {"host": "lava.horizxon.tech", "port": 80, "password": "horizxon.tech"},
     {"host": "lavalink1.albinhakanson.se", "port": 1141, "password": "albinhakanson.se"}
 ]
 

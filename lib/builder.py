@@ -17,14 +17,22 @@ class MessageTypes:
     title = [None,"Success","Warning","Information","Help"]
 class MessageBuilder:
     def error(self,type = 1,vars=[]):
+        print(vars,type)
         return discord.Embed(color=discord.Color.red(),
                              title=ErrorTypes.lang[type],
                              description=self.template(vars,type)
                              )
-    def message(self,type = MessageTypes.GENERIC):
-        return discord.Embed(
+    def message(self,type = MessageTypes.GENERIC, vars = None):
+        if vars is None:
+         return discord.Embed(
             color=MessageTypes.color[type],
-            title=MessageTypes.title[type]
+            title=MessageTypes.title[type],
+            )
+        else:
+         return discord.Embed(
+            color=MessageTypes.color[type],
+            title=MessageTypes.title[type],
+            description=vars[0]
             )
     def template(vars,type):
         msg = ErrorTypes.desc[type]
